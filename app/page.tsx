@@ -40,7 +40,7 @@ export default async function DashboardPage() {
         {jobs.length === 0 ? (
           <div className="text-center py-24 text-gray-500">
             <p className="text-lg">Nenhum job criado ainda.</p>
-            <p className="mt-2">Clica em &quot;Novo Job&quot; para importar produtos de uma Google Sheet.</p>
+            <p className="mt-2">Clica em &quot;Novo Job&quot; e cola os links dos produtos.</p>
           </div>
         ) : (
           <div className="space-y-6">

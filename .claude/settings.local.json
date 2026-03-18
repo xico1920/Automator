@@ -20,7 +20,10 @@
       "Bash(npm run:*)",
       "Bash(find C:/Users/kikob/OneDrive/Desktop/Automator/lib -name *.ts)",
       "Bash(npx playwright:*)",
-      "Bash(npm list:*)"
+      "Bash(npm list:*)",
+      "Bash(rm \"C:/Users/kikob/OneDrive/Desktop/Automator/app/api/sheets/route.ts\")",
+      "Bash(rmdir \"C:/Users/kikob/OneDrive/Desktop/Automator/app/api/sheets\")",
+      "Bash(npm uninstall:*)"
     ]
   }
 }

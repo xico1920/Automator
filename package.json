@@ -16,7 +16,6 @@
     "@types/uuid": "^10.0.0",
     "axios": "^1.13.6",
     "better-sqlite3": "^12.8.0",
-    "googleapis": "^171.4.0",
     "next": "^16.1.7",
     "playwright": "^1.58.2",
     "prisma": "^7.5.0",
