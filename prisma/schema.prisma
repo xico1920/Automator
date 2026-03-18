@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Job {
+  id          String      @id @default(cuid())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  sheetUrl    String
+  status      String      @default("pending") // pending | running | completed | failed
+  products    Product[]
+}
+
+model Product {
+  id              String          @id @default(cuid())
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  jobId           String
+  job             Job             @relation(fields: [jobId], references: [id])
+  sourceUrl       String
+  type            String          @default("single_product") // single_product | collection
+  shopifyId       String?
+  shopifyHandle   String?
+  title           String?
+  description     String?
+  status          String          @default("pending")
+  currentStep     Int             @default(1)
+  pipelineSteps   PipelineStep[]
+  creatives       Creative[]
+  metaCampaignId  String?
+  metaAdSetId     String?
+  metaAdId        String?
+}
+
+model PipelineStep {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  step        Int       // 1-5
+  status      String    @default("pending") // pending | running | awaiting_approval | approved | failed
+  data        String?   // JSON blob with step-specific data
+  logs        String?   // JSON array of log messages
+  error       String?
+}
+
+model Creative {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  url         String
+  localPath   String?
+  type        String    @default("single_image") // single_image | collage | carousel | video
+  selected    Boolean   @default(false)
+  exifRemoved Boolean   @default(false)
+  bgRemoved   Boolean   @default(false)
+  width       Int       @default(0)
+  height      Int       @default(0)
+  sizeBytes   Int       @default(0)
+}
