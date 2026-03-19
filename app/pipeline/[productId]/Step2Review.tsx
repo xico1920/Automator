@@ -76,17 +76,27 @@ export default function Step2Review({
   if (stepStatus === 'pending') {
     return (
       <div className="mt-4">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-sm text-blue-800">
+        <div
+          style={{
+            background: 'rgba(8,102,255,0.08)',
+            border: '1px solid rgba(8,102,255,0.18)',
+            color: '#93c5fd',
+            borderRadius: 8,
+            padding: '1rem',
+            marginBottom: '1rem',
+            fontSize: '0.875rem',
+          }}
+        >
           <p className="font-medium mb-1">Automação via Poky</p>
           <p>Vai abrir um browser {process.env.NODE_ENV !== 'production' ? 'visível' : 'headless'} e importar o produto automaticamente para o Shopify.</p>
         </div>
         {actionError && (
-          <p className="text-red-600 text-sm mb-3">{actionError}</p>
+          <p style={{ color: 'var(--red)', fontSize: '0.875rem', marginBottom: '0.75rem' }}>{actionError}</p>
         )}
         <button
           onClick={handleStart}
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+          className="btn btn-primary"
         >
           {loading ? 'A iniciar...' : 'Iniciar Import via Poky'}
         </button>
@@ -99,11 +109,19 @@ export default function Step2Review({
     return (
       <div className="mt-4">
         <div className="flex items-center gap-2 mb-3">
-          <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-blue-700 font-medium">Browser automation em progresso...</p>
+          <div
+            className="w-4 h-4 rounded-full animate-spin"
+            style={{
+              border: '2px solid var(--meta-blue)',
+              borderTopColor: 'transparent',
+            }}
+          />
+          <p style={{ fontSize: '0.875rem', color: 'var(--meta-blue)', fontWeight: 500 }}>
+            Browser automation em progresso...
+          </p>
         </div>
         {logs.length > 0 && (
-          <div className="bg-gray-900 rounded-lg p-3 font-mono text-xs text-green-400 space-y-1 max-h-48 overflow-y-auto">
+          <div className="log-terminal max-h-48 overflow-y-auto space-y-1">
             {logs.map((log, i) => <div key={i}>{log}</div>)}
           </div>
         )}
@@ -115,29 +133,40 @@ export default function Step2Review({
   if (stepStatus === 'failed') {
     return (
       <div className="mt-4 space-y-3">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm font-semibold text-red-700 mb-1">Automação falhou</p>
-          {error && <p className="text-xs text-red-600 font-mono">{error}</p>}
+        <div
+          style={{
+            background: 'rgba(239,68,68,0.08)',
+            border: '1px solid rgba(239,68,68,0.18)',
+            color: '#f87171',
+            borderRadius: 8,
+            padding: '1rem',
+          }}
+        >
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}>Automação falhou</p>
+          {error && <p style={{ fontSize: '0.75rem', fontFamily: 'JetBrains Mono, monospace' }}>{error}</p>}
         </div>
 
         {logs.length > 0 && (
-          <div className="bg-gray-900 rounded-lg p-3 font-mono text-xs text-red-400 space-y-1 max-h-40 overflow-y-auto">
+          <div className="log-terminal max-h-40 overflow-y-auto space-y-1">
             {logs.map((log, i) => <div key={i}>{log}</div>)}
           </div>
         )}
 
         {data?.screenshotPath && (
-          <p className="text-xs text-gray-500">
-            Screenshot: <code className="bg-gray-100 px-1 rounded">{data.screenshotPath}</code>
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+            Screenshot:{' '}
+            <code style={{ background: 'var(--bg-elevated)', padding: '0 4px', borderRadius: 4, fontFamily: 'JetBrains Mono, monospace' }}>
+              {data.screenshotPath}
+            </code>
           </p>
         )}
 
-        {actionError && <p className="text-red-600 text-sm">{actionError}</p>}
+        {actionError && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{actionError}</p>}
 
         <button
           onClick={handleStart}
           disabled={loading}
-          className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+          className="btn btn-danger"
         >
           {loading ? 'A reiniciar...' : 'Tentar Novamente'}
         </button>
@@ -153,12 +182,23 @@ export default function Step2Review({
 
     return (
       <div className="mt-4 space-y-4">
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <p className="text-sm font-semibold text-green-700 mb-2">Produto importado com sucesso</p>
+        <div
+          style={{
+            background: 'rgba(34,197,94,0.08)',
+            border: '1px solid rgba(34,197,94,0.18)',
+            color: '#4ade80',
+            borderRadius: 8,
+            padding: '1rem',
+          }}
+        >
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.5rem' }}>Produto importado com sucesso</p>
 
           {data?.shopifyProductId && (
-            <p className="text-xs text-gray-600 mb-1">
-              ID Shopify: <code className="bg-white px-1 rounded border">{data.shopifyProductId}</code>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>
+              ID Shopify:{' '}
+              <code style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', padding: '0 4px', borderRadius: 4, fontFamily: 'JetBrains Mono, monospace' }}>
+                {data.shopifyProductId}
+              </code>
             </p>
           )}
 
@@ -167,7 +207,7 @@ export default function Step2Review({
               href={shopifyAdminUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 hover:text-blue-800 underline"
+              style={{ fontSize: '0.75rem', color: 'var(--meta-blue)', textDecoration: 'underline' }}
             >
               Ver no Shopify Admin →
             </a>
@@ -175,25 +215,25 @@ export default function Step2Review({
         </div>
 
         {logs.length > 0 && (
-          <div className="bg-gray-900 rounded-lg p-3 font-mono text-xs text-green-400 space-y-1 max-h-32 overflow-y-auto">
+          <div className="log-terminal max-h-32 overflow-y-auto space-y-1">
             {logs.map((log, i) => <div key={i}>{log}</div>)}
           </div>
         )}
 
-        {actionError && <p className="text-red-600 text-sm">{actionError}</p>}
+        {actionError && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{actionError}</p>}
 
         <div className="flex gap-3">
           <button
             onClick={handleApprove}
             disabled={loading}
-            className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50"
+            className="btn btn-success flex-1"
           >
             {loading ? 'A confirmar...' : 'Confirmar e Continuar →'}
           </button>
           <button
             onClick={handleStart}
             disabled={loading}
-            className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-gray-300 disabled:opacity-50"
+            className="btn btn-ghost"
           >
             Correr de Novo
           </button>
@@ -206,10 +246,12 @@ export default function Step2Review({
   if (stepStatus === 'approved') {
     return (
       <div className="mt-3">
-        <p className="text-sm text-green-700">
+        <p style={{ fontSize: '0.875rem', color: 'var(--green)' }}>
           ✓ Import concluído
           {data?.shopifyProductId && (
-            <span className="text-gray-500 ml-2 font-mono text-xs">ID: {data.shopifyProductId}</span>
+            <span style={{ color: 'var(--text-secondary)', marginLeft: '0.5rem', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem' }}>
+              ID: {data.shopifyProductId}
+            </span>
           )}
         </p>
       </div>

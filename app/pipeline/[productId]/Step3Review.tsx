@@ -93,58 +93,93 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
     }
   }
 
+  // ── Score card helpers ──
+  function descCardStyle() {
+    if (vd.descriptionQuality.isGood) {
+      return { background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.18)' }
+    }
+    return { background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }
+  }
+
+  function descScoreColor() {
+    return vd.descriptionQuality.isGood ? '#4ade80' : 'var(--amber)'
+  }
+
+  function descBadgeStyle() {
+    if (vd.descriptionQuality.isGood) {
+      return { background: 'rgba(34,197,94,0.15)', color: '#4ade80' }
+    }
+    return { background: 'rgba(245,158,11,0.15)', color: 'var(--amber)' }
+  }
+
+  function bgCardStyle() {
+    if (vd.backgroundCheck.hasWhiteBackground) {
+      return { background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.18)' }
+    }
+    if (vd.changes.backgroundRemoved) {
+      return { background: 'rgba(8,102,255,0.08)', border: '1px solid rgba(8,102,255,0.18)' }
+    }
+    return { background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.18)' }
+  }
+
+  function bgTextColor() {
+    if (vd.backgroundCheck.hasWhiteBackground) return '#4ade80'
+    if (vd.changes.backgroundRemoved) return '#93c5fd'
+    return '#f87171'
+  }
+
   return (
     <div className="mt-4 space-y-4">
       {/* Summary cards */}
       <div className="grid grid-cols-2 gap-3">
         {/* Description quality */}
-        <div className={`rounded-lg p-4 border ${vd.descriptionQuality.isGood ? 'bg-green-50 border-green-200' : 'bg-yellow-50 border-yellow-200'}`}>
-          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Descrição</p>
+        <div style={{ ...descCardStyle(), borderRadius: 8, padding: '1rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Descrição</p>
           <div className="flex items-center gap-2">
-            <span className={`text-2xl font-bold ${vd.descriptionQuality.isGood ? 'text-green-600' : 'text-yellow-600'}`}>
+            <span style={{ fontSize: '1.5rem', fontWeight: 700, color: descScoreColor() }}>
               {vd.descriptionQuality.score}/10
             </span>
-            <span className={`text-xs px-2 py-0.5 rounded-full ${vd.descriptionQuality.isGood ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+            <span style={{ fontSize: '0.75rem', padding: '2px 8px', borderRadius: 9999, ...descBadgeStyle() }}>
               {vd.descriptionQuality.isGood ? 'Boa' : 'Fraca'}
             </span>
           </div>
-          <p className="text-xs text-gray-600 mt-1">{vd.descriptionQuality.reason}</p>
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>{vd.descriptionQuality.reason}</p>
         </div>
 
         {/* Background */}
-        <div className={`rounded-lg p-4 border ${vd.backgroundCheck.hasWhiteBackground ? 'bg-green-50 border-green-200' : vd.changes.backgroundRemoved ? 'bg-blue-50 border-blue-200' : 'bg-red-50 border-red-200'}`}>
-          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Fundo da Imagem</p>
-          <p className={`text-sm font-semibold ${vd.backgroundCheck.hasWhiteBackground ? 'text-green-700' : vd.changes.backgroundRemoved ? 'text-blue-700' : 'text-red-700'}`}>
+        <div style={{ ...bgCardStyle(), borderRadius: 8, padding: '1rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Fundo da Imagem</p>
+          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: bgTextColor() }}>
             {vd.backgroundCheck.hasWhiteBackground
               ? 'Branco ✓'
               : vd.changes.backgroundRemoved
               ? 'Removido via Remove.bg ✓'
               : 'Não branco — sem chave Remove.bg'}
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
             {Math.round(vd.backgroundCheck.nonWhiteRatio * 100)}% pixels não-brancos na borda
           </p>
         </div>
 
         {/* Image count */}
-        <div className="rounded-lg p-4 border border-gray-200 bg-gray-50">
-          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Imagens</p>
-          <p className="text-sm text-gray-700">
+        <div style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: 8, padding: '1rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Imagens</p>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-primary)' }}>
             <strong>{vd.imageCount}</strong> no produto ·{' '}
-            <strong className={vd.imageCountInDescription < 2 ? 'text-red-600' : 'text-gray-700'}>
+            <strong style={{ color: vd.imageCountInDescription < 2 ? 'var(--red)' : 'var(--text-primary)' }}>
               {vd.imageCountInDescription}
             </strong>{' '}
             na descrição
             {vd.imageCountInDescription < 2 && (
-              <span className="text-red-600"> ⚠ mínimo 2</span>
+              <span style={{ color: 'var(--red)' }}> ⚠ mínimo 2</span>
             )}
           </p>
         </div>
 
         {/* Changes summary */}
-        <div className="rounded-lg p-4 border border-gray-200 bg-gray-50">
-          <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Alterações</p>
-          <ul className="text-xs text-gray-700 space-y-1">
+        <div style={{ background: 'var(--bg-elevated)', border: '1px solid var(--border)', borderRadius: 8, padding: '1rem' }}>
+          <p style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>Alterações</p>
+          <ul style={{ fontSize: '0.75rem', color: 'var(--text-primary)' }} className="space-y-1">
             <li>{vd.changes.backgroundRemoved ? '✅' : '—'} Fundo removido</li>
             <li>{vd.changes.descriptionRewritten ? '✅' : '—'} Descrição reescrita</li>
           </ul>
@@ -153,11 +188,14 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
 
       {/* Description diff */}
       {vd.changes.descriptionRewritten && (
-        <div className="border border-gray-200 rounded-lg overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
-            <p className="text-sm font-medium text-gray-700">Descrição reescrita</p>
+        <div style={{ border: '1px solid var(--border)', borderRadius: 10, overflow: 'hidden' }}>
+          <div
+            className="flex items-center justify-between px-4 py-2"
+            style={{ background: 'var(--bg-elevated)', borderBottom: '1px solid var(--border)' }}
+          >
+            <p style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-primary)' }}>Descrição reescrita</p>
             <div className="flex items-center gap-3">
-              <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+              <label className="flex items-center gap-2 cursor-pointer" style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                 <input
                   type="checkbox"
                   checked={applyDescription}
@@ -168,7 +206,7 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
               </label>
               <button
                 onClick={() => setShowDiff(!showDiff)}
-                className="text-xs text-blue-600 hover:text-blue-800"
+                style={{ fontSize: '0.75rem', color: 'var(--meta-blue)', background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 {showDiff ? 'Ocultar original' : 'Ver original'}
               </button>
@@ -176,10 +214,14 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
           </div>
 
           {showDiff && vd.originalDescription && (
-            <div className="p-4 bg-red-50 border-b border-gray-200">
-              <p className="text-xs text-red-600 font-semibold mb-2">ORIGINAL</p>
+            <div
+              className="p-4"
+              style={{ background: 'rgba(239,68,68,0.07)', borderBottom: '1px solid var(--border)' }}
+            >
+              <p style={{ fontSize: '0.75rem', color: '#f87171', fontWeight: 600, marginBottom: '0.5rem' }}>ORIGINAL</p>
               <div
-                className="text-xs text-gray-600 prose prose-sm max-w-none"
+                style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}
+                className="prose prose-sm max-w-none"
                 dangerouslySetInnerHTML={{ __html: vd.originalDescription }}
               />
             </div>
@@ -187,12 +229,13 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
 
           {applyDescription && (
             <div className="p-4">
-              <p className="text-xs text-green-700 font-semibold mb-2">NOVA DESCRIÇÃO (editável)</p>
+              <p style={{ fontSize: '0.75rem', color: '#4ade80', fontWeight: 600, marginBottom: '0.5rem' }}>NOVA DESCRIÇÃO (editável)</p>
               <textarea
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
                 rows={10}
-                className="w-full text-xs border border-gray-200 rounded p-2 font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="input-dark w-full font-mono"
+                style={{ fontSize: '0.75rem', fontFamily: 'JetBrains Mono, monospace' }}
               />
             </div>
           )}
@@ -201,7 +244,16 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+        <div
+          style={{
+            background: 'rgba(239,68,68,0.08)',
+            border: '1px solid rgba(239,68,68,0.18)',
+            color: '#f87171',
+            borderRadius: 8,
+            padding: '0.75rem',
+            fontSize: '0.875rem',
+          }}
+        >
           {error}
         </div>
       )}
@@ -211,14 +263,14 @@ export default function Step3Review({ productId, data, onApproved }: Props) {
         <button
           onClick={handleApprove}
           disabled={loading}
-          className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50"
+          className="btn btn-success flex-1"
         >
           {loading ? 'A aplicar...' : 'Aprovar e Continuar →'}
         </button>
         <button
           onClick={handleReject}
           disabled={loading}
-          className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-medium text-sm hover:bg-gray-300 disabled:opacity-50"
+          className="btn btn-ghost"
         >
           Manter original
         </button>

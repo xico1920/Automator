@@ -40,11 +40,12 @@ const TYPE_LABELS: Record<CreativeType, string> = {
   video: 'Vídeo',
 }
 
-const TYPE_COLORS: Record<CreativeType, string> = {
-  single_image: 'bg-blue-100 text-blue-700',
-  collage: 'bg-purple-100 text-purple-700',
-  carousel: 'bg-orange-100 text-orange-700',
-  video: 'bg-pink-100 text-pink-700',
+// Dark-theme badge styles per type
+const TYPE_BADGE_STYLES: Record<CreativeType, React.CSSProperties> = {
+  single_image: { background: 'rgba(8,102,255,0.15)', color: '#93c5fd' },
+  collage: { background: 'rgba(168,85,247,0.15)', color: '#d8b4fe' },
+  carousel: { background: 'rgba(245,158,11,0.15)', color: 'var(--amber)' },
+  video: { background: 'rgba(239,68,68,0.15)', color: '#f87171' },
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -194,15 +195,25 @@ export default function Step4Review({
   if (stepStatus === 'pending') {
     return (
       <div className="mt-4">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 text-sm text-blue-800">
+        <div
+          style={{
+            background: 'rgba(8,102,255,0.08)',
+            border: '1px solid rgba(8,102,255,0.18)',
+            color: '#93c5fd',
+            borderRadius: 8,
+            padding: '1rem',
+            marginBottom: '1rem',
+            fontSize: '0.875rem',
+          }}
+        >
           <p className="font-medium mb-1">Download de criativos</p>
           <p>Vai descarregar todas as imagens do produto Shopify, remover metadata EXIF e classificar automaticamente.</p>
         </div>
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
+        {error && <p style={{ color: 'var(--red)', fontSize: '0.875rem', marginBottom: '0.75rem' }}>{error}</p>}
         <button
           onClick={handleStart}
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+          className="btn btn-primary"
         >
           {loading ? 'A processar...' : 'Carregar Criativos do Shopify'}
         </button>
@@ -214,8 +225,11 @@ export default function Step4Review({
   if (stepStatus === 'running') {
     return (
       <div className="mt-4 flex items-center gap-3">
-        <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-        <p className="text-sm text-blue-700">A descarregar e processar imagens...</p>
+        <div
+          className="w-4 h-4 rounded-full animate-spin"
+          style={{ border: '2px solid var(--meta-blue)', borderTopColor: 'transparent' }}
+        />
+        <p style={{ fontSize: '0.875rem', color: 'var(--meta-blue)' }}>A descarregar e processar imagens...</p>
       </div>
     )
   }
@@ -224,14 +238,23 @@ export default function Step4Review({
   if (stepStatus === 'failed') {
     return (
       <div className="mt-4 space-y-3">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+        <div
+          style={{
+            background: 'rgba(239,68,68,0.08)',
+            border: '1px solid rgba(239,68,68,0.18)',
+            color: '#f87171',
+            borderRadius: 8,
+            padding: '1rem',
+            fontSize: '0.875rem',
+          }}
+        >
           Falhou ao carregar criativos.
         </div>
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{error}</p>}
         <button
           onClick={handleStart}
           disabled={loading}
-          className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 disabled:opacity-50"
+          className="btn btn-danger"
         >
           {loading ? 'A tentar...' : 'Tentar Novamente'}
         </button>
@@ -257,12 +280,18 @@ export default function Step4Review({
             <div
               key={c.id}
               onClick={() => !isApproved && toggleSelect(c.id)}
-              className={`relative rounded-lg border-2 overflow-hidden cursor-pointer transition-all ${
-                isSelected ? 'border-blue-500 shadow-md' : 'border-gray-200 opacity-50'
-              } ${isApproved ? 'cursor-default' : ''}`}
+              style={{
+                border: isSelected ? '2px solid var(--meta-blue)' : '2px solid var(--border)',
+                opacity: isSelected ? 1 : 0.5,
+                borderRadius: 8,
+                overflow: 'hidden',
+                cursor: isApproved ? 'default' : 'pointer',
+                transition: 'all 0.15s',
+                position: 'relative',
+              }}
             >
               {/* Image */}
-              <div className="aspect-square bg-gray-100 relative">
+              <div className="aspect-square relative" style={{ background: 'var(--bg-elevated)' }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={imageUrl(c)}
@@ -271,25 +300,32 @@ export default function Step4Review({
                   loading="lazy"
                 />
                 {isSelected && (
-                  <div className="absolute top-1 right-1 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                  <div className="absolute top-1 right-1 w-5 h-5 rounded-full flex items-center justify-center text-white text-xs font-bold"
+                    style={{ background: 'var(--meta-blue)' }}>
                     ✓
                   </div>
                 )}
                 {isTooSmall && (
-                  <div className="absolute top-1 left-1 bg-amber-500 text-white text-xs px-1 rounded">
+                  <div
+                    className="absolute top-1 left-1 text-xs px-1 rounded"
+                    style={{ background: 'rgba(245,158,11,0.2)', color: 'var(--amber)' }}
+                  >
                     ⚠ Pequena
                   </div>
                 )}
                 {c.exifRemoved && (
-                  <div className="absolute bottom-1 right-1 bg-green-600 text-white text-xs px-1 rounded">
+                  <div
+                    className="absolute bottom-1 right-1 text-xs px-1 rounded"
+                    style={{ background: 'rgba(34,197,94,0.2)', color: '#4ade80' }}
+                  >
                     EXIF ✓
                   </div>
                 )}
               </div>
 
               {/* Info */}
-              <div className="p-1.5 bg-white space-y-1">
-                <p className="text-xs text-gray-500">{c.width}×{c.height}</p>
+              <div className="p-1.5 space-y-1" style={{ background: 'var(--bg-surface)' }}>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{c.width}×{c.height}</p>
                 {!isApproved ? (
                   <select
                     value={currentType}
@@ -298,14 +334,31 @@ export default function Step4Review({
                       setType(c.id, e.target.value as CreativeType)
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full text-xs border border-gray-200 rounded px-1 py-0.5 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                    style={{
+                      width: '100%',
+                      background: 'var(--bg-base)',
+                      border: '1px solid var(--border)',
+                      color: 'var(--text-primary)',
+                      borderRadius: 4,
+                      fontSize: 11,
+                      padding: '2px 4px',
+                      outline: 'none',
+                    }}
                   >
                     {(Object.keys(TYPE_LABELS) as CreativeType[]).map((t) => (
                       <option key={t} value={t}>{TYPE_LABELS[t]}</option>
                     ))}
                   </select>
                 ) : (
-                  <span className={`inline-block text-xs px-1.5 py-0.5 rounded-full ${TYPE_COLORS[currentType] ?? ''}`}>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      fontSize: '0.75rem',
+                      padding: '2px 6px',
+                      borderRadius: 9999,
+                      ...(TYPE_BADGE_STYLES[currentType] ?? {}),
+                    }}
+                  >
                     {TYPE_LABELS[currentType]}
                   </span>
                 )}
@@ -317,12 +370,28 @@ export default function Step4Review({
 
       {/* Sticky validation bar */}
       {validation && !isApproved && (
-        <div className="sticky bottom-4 bg-white border border-gray-200 rounded-xl shadow-lg p-4 space-y-2">
+        <div
+          className="sticky bottom-4 p-4 space-y-2"
+          style={{
+            background: 'var(--bg-elevated)',
+            border: '1px solid var(--border-bright)',
+            borderRadius: 12,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+          }}
+        >
           <div className="flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-3 text-sm flex-wrap">
-              <span className="font-medium">Selecionados: {validation.total}</span>
+              <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>Selecionados: {validation.total}</span>
               {(Object.keys(validation.counts) as CreativeType[]).map((t) => (
-                <span key={t} className={`px-2 py-0.5 rounded-full text-xs ${TYPE_COLORS[t]}`}>
+                <span
+                  key={t}
+                  style={{
+                    padding: '2px 8px',
+                    borderRadius: 9999,
+                    fontSize: '0.75rem',
+                    ...(TYPE_BADGE_STYLES[t] ?? {}),
+                  }}
+                >
                   {TYPE_LABELS[t]}: {validation.counts[t]}
                 </span>
               ))}
@@ -330,7 +399,7 @@ export default function Step4Review({
             <button
               onClick={handleSaveSelection}
               disabled={saving}
-              className="text-xs text-gray-500 hover:text-gray-700 underline"
+              style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
             >
               {saving ? 'A guardar...' : 'Guardar seleção'}
             </button>
@@ -339,31 +408,31 @@ export default function Step4Review({
           {validation.missing.length > 0 ? (
             <div className="space-y-1">
               {validation.missing.map((m, i) => (
-                <p key={i} className="text-xs text-amber-700 flex items-center gap-1">
+                <p key={i} className="flex items-center gap-1" style={{ fontSize: '0.75rem', color: 'var(--amber)' }}>
                   <span>⚠</span> {m}
                 </p>
               ))}
             </div>
           ) : (
-            <p className="text-xs text-green-700 flex items-center gap-1">
+            <p className="flex items-center gap-1" style={{ fontSize: '0.75rem', color: 'var(--green)' }}>
               <span>✅</span> Mínimos atingidos — pronto para continuar
             </p>
           )}
 
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{error}</p>}
 
           <div className="flex gap-3 pt-1">
             <button
               onClick={handleApprove}
               disabled={approving || !validation.valid}
-              className="flex-1 bg-green-600 text-white py-2 rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="btn btn-success flex-1"
             >
               {approving ? 'A aprovar...' : 'Aprovar e Continuar →'}
             </button>
             <button
               onClick={handleStart}
               disabled={loading}
-              className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-300 disabled:opacity-50"
+              className="btn btn-ghost"
             >
               Recarregar
             </button>
@@ -373,7 +442,16 @@ export default function Step4Review({
 
       {/* Approved summary */}
       {isApproved && validation && (
-        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700">
+        <div
+          style={{
+            background: 'rgba(34,197,94,0.08)',
+            border: '1px solid rgba(34,197,94,0.18)',
+            color: '#4ade80',
+            borderRadius: 8,
+            padding: '0.75rem',
+            fontSize: '0.875rem',
+          }}
+        >
           ✓ {validation.total} criativos aprovados —{' '}
           {(Object.keys(validation.counts) as CreativeType[])
             .filter((t) => validation.counts[t] > 0)

@@ -44,20 +44,36 @@ interface Props {
 
 function AdPreview({ imageUrl, titulo, descripcion }: { imageUrl?: string; titulo: string; descripcion: string }) {
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm w-full max-w-xs">
+    <div
+      style={{
+        border: '1px solid var(--border)',
+        borderRadius: 12,
+        overflow: 'hidden',
+        background: 'var(--bg-surface)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+        width: '100%',
+        maxWidth: 320,
+      }}
+    >
       {imageUrl && (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={imageUrl} alt="creative" className="w-full aspect-square object-cover" />
       )}
       {!imageUrl && (
-        <div className="w-full aspect-square bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-gray-400 text-sm">
+        <div
+          className="w-full aspect-square flex items-center justify-center text-sm"
+          style={{
+            background: 'linear-gradient(135deg, rgba(8,102,255,0.12), rgba(168,85,247,0.12))',
+            color: 'var(--text-muted)',
+          }}
+        >
           Preview do criativo
         </div>
       )}
-      <div className="p-3 space-y-1 bg-gray-50 border-t border-gray-100">
-        <p className="text-xs text-gray-500">Patrocinado · SHOP NOW</p>
-        <p className="text-sm font-semibold text-gray-900 leading-tight">{titulo || '—'}</p>
-        <p className="text-xs text-gray-600 leading-snug">{descripcion || '—'}</p>
+      <div className="p-3 space-y-1" style={{ background: 'var(--bg-elevated)', borderTop: '1px solid var(--border)' }}>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Patrocinado · SHOP NOW</p>
+        <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', lineHeight: '1.3' }}>{titulo || '—'}</p>
+        <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>{descripcion || '—'}</p>
       </div>
     </div>
   )
@@ -196,14 +212,22 @@ export default function Step5Review({
   // ── Published ──
   if (published || stepStatus === 'approved') {
     return (
-      <div className="mt-4 bg-green-50 border border-green-200 rounded-xl p-5 space-y-3">
-        <p className="text-green-800 font-semibold">Campanha publicada e ativa!</p>
+      <div
+        className="mt-4 space-y-3"
+        style={{
+          background: 'rgba(34,197,94,0.08)',
+          border: '1px solid rgba(34,197,94,0.18)',
+          borderRadius: 12,
+          padding: '1.25rem',
+        }}
+      >
+        <p style={{ color: '#4ade80', fontWeight: 600 }}>Campanha publicada e ativa!</p>
         {campaignData?.adManagerUrl && (
           <a
             href={campaignData.adManagerUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700"
+            className="btn btn-primary inline-block"
           >
             Ver no Meta Ads Manager →
           </a>
@@ -216,15 +240,24 @@ export default function Step5Review({
   if (phase === 'idle') {
     return (
       <div className="mt-4 space-y-3">
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+        <div
+          style={{
+            background: 'rgba(8,102,255,0.08)',
+            border: '1px solid rgba(8,102,255,0.18)',
+            color: '#93c5fd',
+            borderRadius: 8,
+            padding: '1rem',
+            fontSize: '0.875rem',
+          }}
+        >
           <p className="font-medium mb-1">Criação de Campanha Meta Ads</p>
           <p>Orçamento: <strong>{productType === 'collection' ? '150€/dia' : '51.77€/dia'}</strong> · Objetivo: OUTCOME_TRAFFIC · Status: PAUSED</p>
         </div>
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{error}</p>}
         <button
           onClick={handleGenerateCopy}
           disabled={loading}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+          className="btn btn-primary"
         >
           {loading ? 'A gerar...' : 'Gerar Copy para Anúncio'}
         </button>
@@ -237,18 +270,35 @@ export default function Step5Review({
     return (
       <div className="mt-4 space-y-3">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-blue-700 font-medium">A criar campanha no Meta Ads...</p>
+          <div
+            className="w-4 h-4 rounded-full animate-spin"
+            style={{ border: '2px solid var(--meta-blue)', borderTopColor: 'transparent' }}
+          />
+          <p style={{ fontSize: '0.875rem', color: 'var(--meta-blue)', fontWeight: 500 }}>A criar campanha no Meta Ads...</p>
         </div>
         {logs.length > 0 && (
-          <div className="bg-gray-900 rounded-lg p-3 font-mono text-xs text-green-400 space-y-1 max-h-48 overflow-y-auto">
+          <div className="log-terminal max-h-48 overflow-y-auto space-y-1">
             {logs.map((log, i) => <div key={i}>{log}</div>)}
           </div>
         )}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+          <div
+            style={{
+              background: 'rgba(239,68,68,0.08)',
+              border: '1px solid rgba(239,68,68,0.18)',
+              color: '#f87171',
+              borderRadius: 8,
+              padding: '0.75rem',
+              fontSize: '0.875rem',
+            }}
+          >
             {error}
-            <button onClick={() => setPhase('copy')} className="ml-3 underline text-xs">← Voltar</button>
+            <button
+              onClick={() => setPhase('copy')}
+              style={{ marginLeft: '0.75rem', textDecoration: 'underline', fontSize: '0.75rem', background: 'none', border: 'none', color: '#f87171', cursor: 'pointer' }}
+            >
+              ← Voltar
+            </button>
           </div>
         )}
       </div>
@@ -259,27 +309,50 @@ export default function Step5Review({
   if (phase === 'copy') {
     return (
       <div className="mt-4 space-y-4">
-        <p className="text-sm font-medium text-gray-700">Seleciona e edita uma variante de copy:</p>
+        <p style={{ fontSize: '0.875rem', fontWeight: 500, color: 'var(--text-primary)' }}>Seleciona e edita uma variante de copy:</p>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {editedVariants.map((variant, idx) => (
             <div
               key={idx}
               onClick={() => setSelectedVariantIdx(idx)}
-              className={`border-2 rounded-xl p-4 cursor-pointer transition-all space-y-3 ${
-                selectedVariantIdx === idx ? 'border-blue-500 shadow-md' : 'border-gray-200 hover:border-gray-300'
-              }`}
+              style={{
+                border: selectedVariantIdx === idx
+                  ? '2px solid var(--meta-blue)'
+                  : '2px solid var(--border)',
+                boxShadow: selectedVariantIdx === idx ? '0 0 0 1px rgba(8,102,255,0.15)' : 'none',
+                background: 'var(--bg-elevated)',
+                borderRadius: 12,
+                padding: '1rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+              }}
+              className="space-y-3"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-gray-500 uppercase">Variante {idx + 1}</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
+                  Variante {idx + 1}
+                </span>
                 {selectedVariantIdx === idx && (
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">Selecionada</span>
+                  <span
+                    style={{
+                      fontSize: '0.75rem',
+                      background: 'var(--meta-blue-dim)',
+                      color: '#93c5fd',
+                      padding: '2px 8px',
+                      borderRadius: 9999,
+                    }}
+                  >
+                    Selecionada
+                  </span>
                 )}
               </div>
 
               <div className="space-y-2">
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Título ({variant.titulo.length}/40)</label>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
+                    Título ({variant.titulo.length}/40)
+                  </label>
                   <input
                     type="text"
                     value={variant.titulo}
@@ -290,11 +363,14 @@ export default function Step5Review({
                       setEditedVariants(updated)
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="input-dark w-full"
+                    style={{ fontSize: '0.875rem' }}
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 block mb-1">Descrição ({variant.descripcion.length}/125)</label>
+                  <label style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginBottom: '0.25rem' }}>
+                    Descrição ({variant.descripcion.length}/125)
+                  </label>
                   <textarea
                     value={variant.descripcion}
                     maxLength={125}
@@ -305,7 +381,8 @@ export default function Step5Review({
                       setEditedVariants(updated)
                     }}
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+                    className="input-dark w-full resize-none"
+                    style={{ fontSize: '0.875rem' }}
                   />
                 </div>
               </div>
@@ -320,20 +397,20 @@ export default function Step5Review({
           ))}
         </div>
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{error}</p>}
 
         <div className="flex gap-3">
           <button
             onClick={handleCreateCampaign}
             disabled={loading}
-            className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:bg-blue-700 disabled:opacity-50"
+            className="btn btn-primary flex-1"
           >
             {loading ? 'A criar...' : `Criar Campanha com Variante ${selectedVariantIdx + 1} →`}
           </button>
           <button
             onClick={handleGenerateCopy}
             disabled={loading}
-            className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-300 disabled:opacity-50"
+            className="btn btn-ghost"
           >
             Regenerar
           </button>
@@ -355,37 +432,47 @@ export default function Step5Review({
     return (
       <div className="mt-4 space-y-4">
         {/* Campaign summary */}
-        <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
+        <div
+          className="space-y-3"
+          style={{
+            background: 'var(--bg-elevated)',
+            border: '1px solid var(--border)',
+            borderRadius: 12,
+            padding: '1.25rem',
+          }}
+        >
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-800 text-sm">Campanha criada (PAUSED)</h3>
-            <span className="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded-full font-medium">PAUSED</span>
+            <h3 style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '0.875rem' }}>Campanha criada (PAUSED)</h3>
+            <span className="badge badge-amber">PAUSED</span>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
-              <p className="text-xs text-gray-500">Nome</p>
-              <p className="font-mono text-xs text-gray-700 mt-0.5">{campaignData.campaignName ?? '—'}</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Nome</p>
+              <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                {campaignData.campaignName ?? '—'}
+              </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Orçamento diário</p>
-              <p className="font-semibold text-gray-800 mt-0.5">{budget}€</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Orçamento diário</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>{budget}€</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Início calculado</p>
-              <p className="text-gray-700 mt-0.5">{startDate}</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Início calculado</p>
+              <p style={{ color: 'var(--text-secondary)', marginTop: '2px' }}>{startDate}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Anúncios criados</p>
-              <p className="font-semibold text-gray-800 mt-0.5">{campaignData.adIds?.length ?? 0}</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Anúncios criados</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>{campaignData.adIds?.length ?? 0}</p>
             </div>
           </div>
 
           {/* Copy used */}
           {campaignData.copyUsed && (
-            <div className="bg-gray-50 rounded-lg p-3 space-y-1">
-              <p className="text-xs text-gray-500 font-medium">Copy utilizado</p>
-              <p className="text-sm font-semibold text-gray-800">{campaignData.copyUsed.titulo}</p>
-              <p className="text-xs text-gray-600">{campaignData.copyUsed.descripcion}</p>
+            <div style={{ background: 'var(--bg-base)', borderRadius: 8, padding: '0.75rem' }} className="space-y-1">
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500 }}>Copy utilizado</p>
+              <p style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)' }}>{campaignData.copyUsed.titulo}</p>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{campaignData.copyUsed.descripcion}</p>
             </div>
           )}
 
@@ -404,7 +491,7 @@ export default function Step5Review({
               href={campaignData.adManagerUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 hover:text-blue-800 underline"
+              style={{ fontSize: '0.75rem', color: 'var(--meta-blue)', textDecoration: 'underline' }}
             >
               Ver no Meta Ads Manager →
             </a>
@@ -413,30 +500,38 @@ export default function Step5Review({
 
         {/* Logs */}
         {logs.length > 0 && (
-          <div className="bg-gray-900 rounded-lg p-3 font-mono text-xs text-green-400 space-y-1 max-h-32 overflow-y-auto">
+          <div className="log-terminal max-h-32 overflow-y-auto space-y-1">
             {logs.map((log, i) => <div key={i}>{log}</div>)}
           </div>
         )}
 
-        {error && <p className="text-red-600 text-sm">{error}</p>}
+        {error && <p style={{ color: 'var(--red)', fontSize: '0.875rem' }}>{error}</p>}
 
         {/* Publish confirmation */}
         {publishConfirm ? (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
-            <p className="text-sm text-amber-800 font-medium">
+          <div
+            className="space-y-3"
+            style={{
+              background: 'rgba(245,158,11,0.08)',
+              border: '1px solid rgba(245,158,11,0.18)',
+              borderRadius: 12,
+              padding: '1rem',
+            }}
+          >
+            <p style={{ fontSize: '0.875rem', color: 'var(--amber)', fontWeight: 500 }}>
               Tens a certeza? Esta ação vai ativar a campanha e começar a gastar orçamento real ({budget}€/dia).
             </p>
             <div className="flex gap-3">
               <button
                 onClick={handlePublish}
                 disabled={loading}
-                className="flex-1 bg-red-600 text-white py-2 rounded-lg font-medium text-sm hover:bg-red-700 disabled:opacity-50"
+                className="btn btn-danger flex-1"
               >
                 {loading ? 'A publicar...' : 'Confirmar Publicação'}
               </button>
               <button
                 onClick={() => setPublishConfirm(false)}
-                className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-300"
+                className="btn btn-ghost"
               >
                 Cancelar
               </button>
@@ -446,7 +541,7 @@ export default function Step5Review({
           <div className="flex gap-3">
             <button
               onClick={() => setPublishConfirm(true)}
-              className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg font-medium text-sm hover:bg-green-700"
+              className="btn btn-success flex-1"
             >
               Publicar Campanha (ACTIVE)
             </button>
@@ -459,7 +554,7 @@ export default function Step5Review({
                   body: JSON.stringify({ step: 5 }),
                 }).then(() => onRefresh())
               }}
-              className="bg-gray-200 text-gray-700 py-2 px-4 rounded-lg text-sm hover:bg-gray-300"
+              className="btn btn-ghost"
             >
               Deixar em Pausa
             </button>

@@ -23,7 +23,10 @@
       "Bash(npm list:*)",
       "Bash(rm \"C:/Users/kikob/OneDrive/Desktop/Automator/app/api/sheets/route.ts\")",
       "Bash(rmdir \"C:/Users/kikob/OneDrive/Desktop/Automator/app/api/sheets\")",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(Remove-Item -Recurse -Force \"C:/Users/kikob/OneDrive/Desktop/Automator/.next\" 2>&1)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(find /c/Users/kikob -name *.tsx -path */dashboard*)"
     ]
   }
 }
